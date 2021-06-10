@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>Tangram</title>
+    <!-- icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- alert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="js/sweetalert2.all.min.js"></script>
+    <!-- md5 -->
+    <script src="js/md5.min.js"></script>
+    <!-- styles -->
+    <link
+      rel="stylesheet"
+      href="css/style.css"
+      type="text/css"
+      media="screen"
+      charset="utf-8"
+    />
+    <!-- js -->
+    <script src="js/instructions.js"></script>
+    <script src="js/stoppedTyping.js"></script>
+    <script src="js/removeAnnotation.js"></script> 
+  </head>
+
+  <body>
+    <!-- <button
+      id="instructions"
+      class="button instructions-bt"
+      onclick="showTutorial()"
+    >
+      Instructions
+    </button> -->
+
+    <div id="preview" class="preview">
+      <p>
+        This tangram is for preview only. The tangram in the acccepted
+        assignment may be different.
+      </p>
+    </div>
+
+    <div id="left" class="left">
+      <object
+        class="tangram"
+        id="tangramObj"
+        data=""
+        type="image/svg+xml"
+        height="100%"
+      ></object>
+    </div>
+
+    <div class="whole-layout" id="whole">
+      <div class="output-outer-whole" id="output-outer-whole">
+        <div></div>
+          <p>
+           This shape, as a whole, looks like 
+            <input
+              id="annotate-whole"
+              class="textbox"
+              type="text"
+              onkeyup="stoppedTypingWhole()"
+              autocomplete="off"
+            />
+            .
+          <button id="continue" class="button submit" disabled="true">
+            Continue
+            <img class="icon"  src="icons/enter.png"/>
+          </button>
+          <!-- <a class="suggestion"> or hit ENTER</a> -->
+        </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="piece-layout" id="piece">
+      <div class="output-outer" id="output-outer">
+        <p class="piece-description">
+            The parts you annotated:
+        </p>
+        <div class="output" id="output">
+          <p id="whole-result" class="whole-result"></p>
+          <ul id="list" class="list"></ul>
+        </div>
+        <p class="note">
+          <b>Note:</b><br/>
+          <!-- 1. If you entered the <b>same</b> annotation, try to be more <b>specific</b>: (e.g.) annotate "<i>left leg</i>" and "<i>right leg</i>" instead of "<i>legs</i>".<br/>
+          If you can't find a more specific annotation, the "<b>Annotate</b>" button will become "<b>Add to Group</b>" to add the newly selected piece(s) into the existing annotion group. <br/> -->
+          1. If you entered the same annotation, the "<b>Annotate</b>" button will become "<b>Add to Group</b>" to add the newly selected piece(s) into the existing annotion group. <br/>
+          2. Delete an annotation by clicking <button class="btn trash"><i class="fa fa-trash"></i></button> next to the annotation.<br/> 
+          3. You have to annotate <b>all</b> pieces in order to submit. Try to come up with an annotation for each part. If you can't think of an annotation for a part, use the "<b>I don't know</b>" button to annotate.<br/>
+        </p>
+      </div>
+
+      <p class="select-description">
+        Click to select one or multiple pieces that constitute a meaningful part:
+      </p>
+
+      <div class="annotation" id="annotate-outer">
+       <p style="font-size: 20px;">The part you selected looks like <input
+          id="annotate"
+          class="textbox"
+          type="text"
+          onkeyup="stoppedTyping()"
+          autocomplete="off"
+          disabled
+        />.</p>
+        <button id="submit" class="button submit" disabled>Annotate <img class="icon" src="icons/enter.png"></button>
+        <!-- <a class="suggestion"> or hit ENTER</a> -->
+        <button id="idk" class="button idk" disabled>I don't know</button>
+      </div>
+    </div>
+
+    <div class="next-area" id="next-area">
+      <button id="next" class="button next" disabled>
+        Submit
+        <img class="icon" src="icons/shift.png"/>
+      </button>
+      <!-- <a class="next-suggestion"> or hit SHIFT</a> -->
+    </div>
+
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-app.js"></script>
+
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-storage.js"></script>
+
+    <script type="text/javascript" src="js/firebaseConfig.js"></script>
+
+    <script type="text/javascript" src="js/mainTrial.js"></script>
+    <script type="text/javascript" src="js/pieceTrial.js"></script>
+    <script type="text/javascript" src="js/wholeTrial.js"></script>
+  </body>
+</html>

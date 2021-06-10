@@ -1,0 +1,11 @@
+*.swp
+*.swo
+*~
+*.log
+node_modules
+*.env
+.DS_Store
+package-lock.json
+.bloggify/*
+admin/venv/*
+admin/tangram-online-firebase-adminsdk-pkuk1-c623f892a3.json
