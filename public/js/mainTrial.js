@@ -131,8 +131,8 @@ function fetchTangram() {
     .where(
       "lastClaimed",
       "<=",
-      firebase.firestore.Timestamp.fromMillis(Date.now() - 30000)
-    ) // claimed 30 secs ago
+      firebase.firestore.Timestamp.fromMillis(Date.now() - 780000)
+    ) // claimed 13 mins ago, expired
     .get()
     .then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
@@ -149,9 +149,11 @@ function fetchTangram() {
         .where("available", "==", true)
         .get()
         .then((querySnapshot) => {
-          // worker hasn't done this tangram
+          // worker hasn't done/claimed this tangram
           const doc = querySnapshot.docs.find(
-            (d) => !d.data()["completedWorkers"].includes(workerId)
+            (d) =>
+              !d.data()["completedWorkers"].includes(workerId) &&
+              !d.data()["claimedWorkers"].includes(workerId)
           );
 
           if (querySnapshot.docs === [] || doc === undefined) {
@@ -161,6 +163,7 @@ function fetchTangram() {
               "No available tangrams. Please wait for a few minutes and refresh."
             );
           } else {
+            // claim new tangram
             file = doc.id;
             filesRef
               .doc(file)
@@ -168,6 +171,7 @@ function fetchTangram() {
                 {
                   available: false,
                   lastClaimed: firebase.firestore.Timestamp.now(),
+                  claimedWorkers: firebase.firestore.FieldValue.arrayUnion(workerId)
                 },
                 { merge: true }
               )
