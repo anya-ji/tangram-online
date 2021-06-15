@@ -122,72 +122,82 @@ next.addEventListener("click", async (e) => {
                     },
                     { merge: true }
                   )
-                  .then(async () => {
-                    reset();
-
-                    const { value: text } = await Swal.fire({
-                      title: "<strong>Annotations submitted!</strong>",
-                      icon: "success",
-                      html: 'Thank you for completing the task!<textarea id="swal-input1" class="swal2-input" rows="4" style="font-family: Times, serif; padding-top: 1px;" placeholder="(Optional) Enter your feedback...">',
-                      confirmButtonText: "Submit",
-                      confirmButtonColor: "#4caf50",
-                      preConfirm: () => {
-                        return document.getElementById("swal-input1").value;
-                      },
-                      showCancelButton: false,
-                      showCloseButton: false,
-                      focusConfirm: true,
-                      showConfirmButton: true,
-                      allowOutsideClick: false,
-                      allowEscapeKey: false,
-                      allowEnterKey: true,
-                    });
-
-                    feedbackText = text
-
-                    db.collection("assignments")
-                      .doc(assignmentId)
+                  .then(() => {
+                    db.collection("counts")
+                      .doc("counts")
                       .update({
-                        feedback: text,
+                        [fileName]: firebase.firestore.FieldValue.increment(1),
                       })
-                      .then(() => {
-                        //MTurk submit
-                        const urlParams = new URLSearchParams(
-                          window.location.search
-                        );
+                      .then(async () => {
+                        reset();
 
-                        // create the form element and point it to the correct endpoint
-                        const form = document.createElement("form");
-                        form.action = new URL(
-                          "mturk/externalSubmit",
-                          urlParams.get("turkSubmitTo")
-                        ).href;
-                        form.method = "post";
+                        const { value: text } = await Swal.fire({
+                          title: "<strong>Annotations submitted!</strong>",
+                          icon: "success",
+                          html: 'Thank you for completing the task!<textarea id="swal-input1" class="swal2-input" rows="4" style="font-family: Times, serif; padding-top: 1px;" placeholder="(Optional) Enter your feedback...">',
+                          confirmButtonText: "Submit",
+                          confirmButtonColor: "#4caf50",
+                          preConfirm: () => {
+                            return document.getElementById("swal-input1").value;
+                          },
+                          showCancelButton: false,
+                          showCloseButton: false,
+                          focusConfirm: true,
+                          showConfirmButton: true,
+                          allowOutsideClick: false,
+                          allowEscapeKey: false,
+                          allowEnterKey: true,
+                        });
 
-                        // attach the assignmentId
-                        const inputAssignmentId = document.createElement("input");
-                        inputAssignmentId.name = "assignmentId";
-                        inputAssignmentId.value = urlParams.get("assignmentId");
-                        inputAssignmentId.hidden = true;
-                        form.appendChild(inputAssignmentId);
+                        feedbackText = text;
 
-                        // need one additional field asside from assignmentId
-                        const inputFeedback = document.createElement("input");
-                        inputFeedback.name = "feedback";
-                        inputFeedback.value = feedbackText;
-                        inputFeedback.hidden = true;
-                        form.appendChild(inputFeedback);
+                        db.collection("assignments")
+                          .doc(assignmentId)
+                          .update({
+                            feedback: text,
+                          })
+                          .then(() => {
+                            //MTurk submit
+                            const urlParams = new URLSearchParams(
+                              window.location.search
+                            );
 
-                        // copy of database data
-                        const inputData = document.createElement("input");
-                        inputData.name = "data";
-                        inputData.value = JSON.stringify(uploadData);
-                        inputData.hidden = true;
-                        form.appendChild(inputData);
+                            // create the form element and point it to the correct endpoint
+                            const form = document.createElement("form");
+                            form.action = new URL(
+                              "mturk/externalSubmit",
+                              urlParams.get("turkSubmitTo")
+                            ).href;
+                            form.method = "post";
 
-                        // attach the form to the HTML document and trigger submission
-                        document.body.appendChild(form);
-                        form.submit();
+                            // attach the assignmentId
+                            const inputAssignmentId =
+                              document.createElement("input");
+                            inputAssignmentId.name = "assignmentId";
+                            inputAssignmentId.value =
+                              urlParams.get("assignmentId");
+                            inputAssignmentId.hidden = true;
+                            form.appendChild(inputAssignmentId);
+
+                            // need one additional field asside from assignmentId
+                            const inputFeedback =
+                              document.createElement("input");
+                            inputFeedback.name = "feedback";
+                            inputFeedback.value = feedbackText;
+                            inputFeedback.hidden = true;
+                            form.appendChild(inputFeedback);
+
+                            // copy of database data
+                            const inputData = document.createElement("input");
+                            inputData.name = "data";
+                            inputData.value = JSON.stringify(uploadData);
+                            inputData.hidden = true;
+                            form.appendChild(inputData);
+
+                            // attach the form to the HTML document and trigger submission
+                            document.body.appendChild(form);
+                            form.submit();
+                          });
                       });
                   });
               })
