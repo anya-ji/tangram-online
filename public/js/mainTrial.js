@@ -105,20 +105,21 @@ window.onload = function () {
   } else {
     // ** for testing
     // random tangram
-    db.collection("files")
-      .orderBy("count")
-      .limit(1)
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          console.log("Tangram: ", doc.id);
-          //start trial
-          startTrial(doc.id);
-        });
-      })
-      .catch((error) => {
-        console.log("Error getting documents: ", error);
-      });
+    startTrial("a.svg");
+    // db.collection("files")
+    //   .orderBy("count")
+    //   .limit(1)
+    //   .get()
+    //   .then((querySnapshot) => {
+    //     querySnapshot.forEach((doc) => {
+    //       console.log("Tangram: ", doc.id);
+    //       //start trial
+    //       startTrial(doc.id);
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     console.log("Error getting documents: ", error);
+    //   });
   }
 };
 
@@ -131,8 +132,8 @@ function fetchTangram() {
     .where(
       "lastClaimed",
       "<=",
-      firebase.firestore.Timestamp.fromMillis(Date.now() - 780000)
-    ) // claimed 13 mins ago, expired
+      firebase.firestore.Timestamp.fromMillis(Date.now() - 60000)
+    ) // claimed 1 mins ago
     .get()
     .then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
@@ -171,7 +172,8 @@ function fetchTangram() {
                 {
                   available: false,
                   lastClaimed: firebase.firestore.Timestamp.now(),
-                  claimedWorkers: firebase.firestore.FieldValue.arrayUnion(workerId)
+                  claimedWorkers:
+                    firebase.firestore.FieldValue.arrayUnion(workerId),
                 },
                 { merge: true }
               )
@@ -185,6 +187,7 @@ function fetchTangram() {
                       file: file,
                       lastClaimed: firebase.firestore.Timestamp.now(),
                       workerId: workerId,
+                      version: "pilot2",
                     },
                     { merge: true }
                   )

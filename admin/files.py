@@ -25,7 +25,7 @@ pfiles = ['page1-5.svg','page1-13.svg','page1-29.svg','page1-34.svg','page2-138.
 'page3-191.svg','page4-56.svg','page4-64.svg','page4-73.svg','page4-228.svg','page5-0.svg',
 'page5-11.svg','page5-64.svg','page6-83.svg','page6-109.svg','page7-29.svg','page7-87.svg',
 'page8-165.svg','page8-218.svg','page9-4.svg','page9-31.svg','page9-45.svg']
-
+#filterout a.svg too!
 i=0
 
 for f in files:
