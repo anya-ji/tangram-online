@@ -187,7 +187,7 @@ function fetchTangram() {
                       file: file,
                       lastClaimed: firebase.firestore.Timestamp.now(),
                       workerId: workerId,
-                      version: "pilot2",
+                      version: "pilot3",
                     },
                     { merge: true }
                   )
