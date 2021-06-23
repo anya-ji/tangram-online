@@ -311,26 +311,29 @@ function startTrial(id) {
       },
       false
     );
-
-    db.collection("users")
-      .doc(workerId)
-      .get()
-      .then((doc) => {
-        if (doc.exists) {
-          d = doc.data();
-          if ("completedQuestionnaire" in d) {
-            // user did questionnaire
-            // START TASK
-            wholeTrial();
+    if (assignmentId === "ASSIGNMENT_ID_NOT_AVAILABLE") {
+      wholeTrial();
+    } else {
+      db.collection("users")
+        .doc(workerId)
+        .get()
+        .then((doc) => {
+          if (doc.exists) {
+            d = doc.data();
+            if ("completedQuestionnaire" in d) {
+              // user did questionnaire
+              // START TASK
+              wholeTrial();
+            } else {
+              // user hasn't done questionnaire
+              question();
+            }
           } else {
-            // user hasn't done questionnaire
+            // first time user
             question();
           }
-        } else {
-          // first time user
-          question();
-        }
-      });
+        });
+    }
   };
 }
 
