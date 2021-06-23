@@ -248,7 +248,6 @@ window.submitQuestion = function () {
 
     //q3
     whereLearn = document.getElementById("country").value;
-    console.log(languages);
 
     //upload
     if (assignmentId && workerId && hitId) {
