@@ -253,12 +253,15 @@ window.submitQuestion = function () {
     if (assignmentId && workerId && hitId) {
       db.collection("users")
         .doc(workerId)
-        .set({
-          languages: languages,
-          engFirst: engFirst,
-          whereLearn: whereLearn,
-          completedQuestionnaire: true,
-        })
+        .set(
+          {
+            languages: languages,
+            engFirst: engFirst,
+            whereLearn: whereLearn,
+            completedQuestionnaire: true,
+          },
+          { merge: true }
+        )
         .then(() => {
           wholeTrial();
         });
