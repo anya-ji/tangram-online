@@ -69,7 +69,7 @@ next.addEventListener("click", async (e) => {
     uploadData["submittedAt"] = firebase.firestore.Timestamp.now();
     uploadData["assignmentId"] = assignmentId;
     uploadData["hitId"] = hitId;
-    uploadData["version"] = "pilot3";
+    uploadData["version"] = version;
     console.log(uploadData);
 
     var updateField = {};
@@ -120,6 +120,7 @@ next.addEventListener("click", async (e) => {
                         turkSubmitTo === null
                           ? null
                           : turkSubmitTo.includes("sandbox"),
+                      version: version,
                     },
                     { merge: true }
                   )

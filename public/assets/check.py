@@ -5,7 +5,7 @@ mypath = "./"
 onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
 
 for file in onlyfiles:
-  if file!="check.py":
+  if file!="check.py" and file!='a.svg':
     f = open(file,'r').read().replace("\n"," ")
     for i in range(1,8):
       count = f.count('id="'+str(i)+'"')
