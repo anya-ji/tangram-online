@@ -124,6 +124,7 @@ window.onload = function () {
 function fetchTangram() {
   // update availability of expired claimed tangram sessions to true
   const filesRef = db.collection("files");
+  const userDoc = db.collection("users").doc(workerId);
   filesRef
     .where("available", "==", false)
     .where(
@@ -142,57 +143,136 @@ function fetchTangram() {
     })
     .then(() => {
       //claim the least annotated and available tangram
-      filesRef
-        .orderBy("count")
-        .where("available", "==", true)
+      userDoc
         .get()
-        .then((querySnapshot) => {
-          // worker hasn't done/claimed this tangram
-          const doc = querySnapshot.docs.find(
-            (d) =>
-              !d.data()["completedWorkers"].includes(workerId) &&
-              !d.data()["claimedWorkers"].includes(workerId)
-          );
-
-          if (querySnapshot.docs === [] || doc === undefined) {
-            // no available
-            // or worker has done all available ones
-            alert(
-              "No available tangrams. Please wait for a few minutes and refresh."
-            );
-          } else {
-            // claim new tangram
-            file = doc.id;
+        .then((doc) => {
+          if (doc.exists) {
+            // EXISTING USER
             filesRef
-              .doc(file)
-              .set(
-                {
-                  available: false,
-                  lastClaimed: firebase.firestore.Timestamp.now(),
-                  claimedWorkers:
-                    firebase.firestore.FieldValue.arrayUnion(workerId),
-                },
-                { merge: true }
-              )
-              .then(() => {
-                //add to unfinished assignments
-                db.collection("assignments")
-                  .doc(assignmentId)
-                  .set(
-                    {
-                      unfinished: true,
-                      file: file,
-                      lastClaimed: firebase.firestore.Timestamp.now(),
-                      workerId: workerId,
-                      version: version,
-                    },
-                    { merge: true }
-                  )
-                  .then(() => {
-                    console.log("Tangram: ", file);
-                    //start trial
-                    startTrial(file);
-                  });
+              .orderBy("count")
+              .where("available", "==", true)
+              .limit(1)
+              .get()
+              .then((querySnapshot) => {
+                // worker hasn't done/claimed this tangram
+                if (querySnapshot.empty) {
+                  // no available
+                  // or worker has done all available ones
+                  alert(
+                    "No available tangrams. Please wait for a few minutes and refresh."
+                  );
+                } else {
+                  // claim new tangram
+                  const doc = querySnapshot.docs[0].data();
+
+                  file = doc.name + ".svg";
+                  filesRef
+                    .doc(file)
+                    .set(
+                      {
+                        available: false,
+                        lastClaimed: firebase.firestore.Timestamp.now(),
+                        claimedWorkers:
+                          firebase.firestore.FieldValue.arrayUnion(workerId),
+                      },
+                      { merge: true }
+                    )
+                    .then(() => {
+                      //add to unfinished assignments
+                      db.collection("assignments")
+                        .doc(assignmentId)
+                        .set(
+                          {
+                            unfinished: true,
+                            file: file,
+                            lastClaimed: firebase.firestore.Timestamp.now(),
+                            workerId: workerId,
+                            version: version,
+                          },
+                          { merge: true }
+                        )
+                        .then(() => {
+                          // add to claimed
+                          userDoc
+                            .update({
+                              claimed:
+                                firebase.firestore.FieldValue.arrayUnion(file),
+                            })
+                            .then(() => {
+                              console.log("Tangram: ", file);
+                              //start trial
+                              startTrial(file);
+                            });
+                        });
+                    });
+                }
+              });
+          } else {
+            // FIRST TIME USER -- user doesn't exist
+            filesRef
+              .orderBy("count")
+              .where("available", "==", true)
+              .limit(1)
+              .get()
+              .then((querySnapshot) => {
+                // worker hasn't done/claimed this tangram
+                if (querySnapshot.empty) {
+                  // no available
+                  // or worker has done all available ones
+                  alert(
+                    "No available tangrams. Please wait for a few minutes and refresh."
+                  );
+                } else {
+                  // claim new tangram
+                  const doc = querySnapshot.docs[0].data();
+
+                  file = doc.name + ".svg";
+                  filesRef
+                    .doc(file)
+                    .set(
+                      {
+                        available: false,
+                        lastClaimed: firebase.firestore.Timestamp.now(),
+                        claimedWorkers:
+                          firebase.firestore.FieldValue.arrayUnion(workerId),
+                      },
+                      { merge: true }
+                    )
+                    .then(() => {
+                      //add to unfinished assignments
+                      db.collection("assignments")
+                        .doc(assignmentId)
+                        .set(
+                          {
+                            unfinished: true,
+                            file: file,
+                            lastClaimed: firebase.firestore.Timestamp.now(),
+                            workerId: workerId,
+                            version: version,
+                          },
+                          { merge: true }
+                        )
+                        .then(() => {
+                          // FIRST TIME set in userDoc
+                          userDoc
+                            // .update({
+                            //   claimed:
+                            //     firebase.firestore.FieldValue.arrayUnion(file),
+                            // })
+                            .set(
+                              {
+                                claimed: [file],
+                              },
+                              { merge: true }
+                            )
+                            .then(() => {
+                              console.log("Tangram: ", file);
+                              //start trial
+                              startTrial(file);
+                            });
+                        });
+                    });
+                }
               });
           }
         })
@@ -308,7 +388,9 @@ function startTrial(id) {
       },
       false
     );
-    if (assignmentId && workerId && hitId) {
+    if (assignmentId === "ASSIGNMENT_ID_NOT_AVAILABLE") {
+      wholeTrial();
+    } else if (assignmentId && workerId && hitId) {
       db.collection("users")
         .doc(workerId)
         .get()
