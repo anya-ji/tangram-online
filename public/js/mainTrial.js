@@ -1,5 +1,5 @@
 // *** check / change before each run!
-var version = "test"; 
+var version = "test";
 var expiringTime = 780000; // hit duration
 var coolDownTime = 300000; // time from last claimed, to prevent all claiming the same tangram before count gets incremented
 // *** end
@@ -77,7 +77,10 @@ window.onload = function () {
           var unfinished = data["unfinished"];
           var unfinishedFile = data["file"];
           var lastClaimed = data["lastClaimed"];
-          if (!unfinished || Date.now() - lastClaimed.toMillis() >= expiringTime) {
+          if (
+            !unfinished ||
+            Date.now() - lastClaimed.toMillis() >= expiringTime
+          ) {
             //doesn't have unfinished or unfinished tangram already expired
             fetchTangram();
           } else {
@@ -305,9 +308,7 @@ function startTrial(id) {
       },
       false
     );
-    if (assignmentId === "ASSIGNMENT_ID_NOT_AVAILABLE") {
-      wholeTrial();
-    } else {
+    if (assignmentId && workerId && hitId) {
       db.collection("users")
         .doc(workerId)
         .get()
@@ -327,6 +328,8 @@ function startTrial(id) {
             question();
           }
         });
+    } else {
+      wholeTrial();
     }
   };
 }
