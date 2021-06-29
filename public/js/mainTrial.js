@@ -1,5 +1,5 @@
 // *** check / change before each run!
-var version = "test";
+var version = "batch1";
 var expiringTime = 780000; // hit duration
 var coolDownTime = 300000; // time from last claimed, to prevent all claiming the same tangram before count gets incremented
 // *** end
