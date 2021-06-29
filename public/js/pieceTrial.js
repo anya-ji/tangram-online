@@ -244,30 +244,8 @@ function annotate(ann) {
   var idk = document.getElementById("idk");
 
   if (!selection.every((v) => v === false)) {
-    //check if selected all piece, alert
-    if (selection.every((v) => v === true)) {
-      Swal.fire({
-        title: "<strong>Reminder</strong>",
-        icon: "info",
-        html: `You are annotating the entire shape as a whole. We expect more granulated annotations to describe PARTS of the entire shape.<br/><br/>
-        To correct this annotation, please remove it <button class="btn trash"><i class="fa fa-trash"></i></button> and re-annotate the parts.<br/><br/>
-        You can revisit the tutorial in the qualification task <a href="https://tangram-dashboard.vercel.app/qual" target="_blank">here</a> (opens in a new tab).`,
-        confirmButtonColor: "#4c7caf",
-      });
-    }
-
-    // check if ' and ' in annotation
-    if (ann.includes(" and ")) {
-      Swal.fire({
-        title: "<strong>Reminder</strong>",
-        icon: "info",
-        html: `We found an "<strong>and</strong>" in your annotation. We expect separate annotations for different parts when possible.<br/><br/>
-        To correct this annotation, please remove it <button class="btn trash"><i class="fa fa-trash"></i></button> and re-annotate the parts.<br/><br/>
-        Ignore this if you think your annotation is correct (e.g. you can't further break your selection into smaller parts).<br/><br/>
-        You can revisit the tutorial in the qualification task <a href="https://tangram-dashboard.vercel.app/qual" target="_blank">here</a> (opens in a new tab).`,
-        confirmButtonColor: "#4c7caf",
-      });
-    }
+    // bad annotations reminder
+    reminders(selection, ann);
 
     //selected pieces
     var indices = selection.reduce(
@@ -316,6 +294,8 @@ function annotate(ann) {
       // record last operation
       piece_to_last_id[id] = lastid;
     }
+
+    allSameReminder();
 
     // save metadata
     metadata[lastid] = {
