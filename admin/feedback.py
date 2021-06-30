@@ -18,7 +18,7 @@ db = firestore.client()
 
 docs = db.collection(u'assignments').stream()
 
-version = 'pilot3'
+version = 'batch1'
 
 rs={}
 i=0
@@ -31,7 +31,8 @@ for doc in docs:
       c = d['feedback']
       n = doc.id
       rs[n] = c
-      print(c)
+     
+      print(d['file'], '(worker:',d['workerId'],'): ', c,'\n')
 
 print(version,'-completed: ', i)
 # print(rs)

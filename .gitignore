@@ -9,5 +9,4 @@ package-lock.json
 .bloggify/*
 admin/venv/*
 admin/tangram-online-firebase-adminsdk-pkuk1-c623f892a3.json
-admin/csv/*
-admin/db/*
+admin/data/*

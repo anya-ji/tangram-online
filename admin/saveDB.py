@@ -20,11 +20,11 @@ db = firestore.client()
 
 
 data = {
-  'annotations':[],
-  'assignments':[],
-  'counts':[],
-  'files':[],
-  'users':[]
+  'annotations':{},
+  'assignments':{},
+  'counts':{},
+  'files':{},
+  'users':{}
 }
 
 def myconverter(o):
@@ -35,11 +35,11 @@ for collection in ['annotations','assignments','counts','files','users']:
   docs = db.collection(collection).stream()
   for doc in docs:
     d = doc.to_dict()
-    data[collection].append(d)
+    data[collection][doc.id] = d
   print('done!: ', collection)
 
 
-with open('./db/0625-pilot3.json', 'w') as outfile:
+with open('./batch1.json', 'w') as outfile:
   json.dump(data, outfile, default = myconverter)
 
 

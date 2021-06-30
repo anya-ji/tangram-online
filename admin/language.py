@@ -37,7 +37,7 @@ for wid, d in rs.items():
   rows.append([wid, d['engFirst'], d['whereLearn'], d['languages']])
 
 # writing to new csv file 
-with open('./csv/languages-pilot3.csv', 'w') as csvfile: 
+with open('./csv/languages-batch1.csv', 'w') as csvfile: 
     # creating a csv writer object 
     csvwriter = csv.writer(csvfile) 
     csvwriter.writerow(['WorkerId','engFirst', 'whereLearn', 'languages'])
