@@ -1,5 +1,5 @@
 // *** check / change before each run!
-var version = "batch1";
+var version = "batch2";
 var expiringTime = 780000; // hit duration
 var coolDownTime = 300000; // time from last claimed, to prevent all claiming the same tangram before count gets incremented
 // *** end
@@ -159,7 +159,8 @@ function fetchTangram() {
                   // no available
                   // or worker has done all available ones
                   alert(
-                    "No available tangrams. Please wait for a few minutes and refresh."
+                    `No available tangrams. Please wait for a few minutes and refresh. 
+                    If you have done all 1005 tangrams, please return the assignment.`
                   );
                 } else {
                   // claim new tangram
@@ -255,10 +256,6 @@ function fetchTangram() {
                         .then(() => {
                           // FIRST TIME set in userDoc
                           userDoc
-                            // .update({
-                            //   claimed:
-                            //     firebase.firestore.FieldValue.arrayUnion(file),
-                            // })
                             .set(
                               {
                                 claimed: [file],

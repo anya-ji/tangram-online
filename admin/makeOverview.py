@@ -6,7 +6,6 @@ Run in venv: source venv/bin/activate
 from os import listdir
 from os.path import isfile, join
 from datetime import datetime, timezone
-import matplotlib.pyplot as plt
 from collections import defaultdict
 import csv 
 import json

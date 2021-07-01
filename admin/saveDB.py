@@ -5,12 +5,6 @@ Run in venv: source venv/bin/activate
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
-from os import listdir
-from os.path import isfile, join
-from datetime import datetime, timezone
-import matplotlib.pyplot as plt
-from collections import defaultdict
-import csv 
 import json
 
 cred = credentials.Certificate("./tangram-online-firebase-adminsdk-pkuk1-c623f892a3.json")
