@@ -6,6 +6,7 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 import json
+from datetime import datetime
 
 cred = credentials.Certificate("./tangram-online-firebase-adminsdk-pkuk1-c623f892a3.json")
 firebase_admin.initialize_app(cred)
@@ -33,7 +34,7 @@ for collection in ['annotations','assignments','counts','files','users']:
   print('done!: ', collection)
 
 
-with open('./batch1.json', 'w') as outfile:
+with open('./batch1+2.json', 'w') as outfile:
   json.dump(data, outfile, default = myconverter)
 
 

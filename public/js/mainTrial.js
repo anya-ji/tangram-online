@@ -1,5 +1,5 @@
 // *** check / change before each run!
-var version = "batch2";
+var version = "batch3";
 var expiringTime = 780000; // hit duration
 var coolDownTime = 300000; // time from last claimed, to prevent all claiming the same tangram before count gets incremented
 // *** end
@@ -66,7 +66,7 @@ window.onload = function () {
     // check if the worker has unfinished work
 
     // make unique assignment ID
-    assignmentId = urlParams.get("assignmentId") + "-" + workerId;
+    assignmentId = hitId + "-" + assignmentId + "-" + workerId;
 
     const assignmentRef = db.collection("assignments").doc(assignmentId);
     assignmentRef.get().then((docSnapshot) => {
@@ -148,7 +148,18 @@ function fetchTangram() {
         .then((doc) => {
           if (doc.exists) {
             // EXISTING USER
+            var d = doc.data();
+            var workerClaimed = d["claimed"].map((e) => e.replace(".svg", ""));
+
+            if (d["assignmentId"].length >= 200) {
+              alert(
+                `You have reached the upper limit of 200 tangrams. Please return the assignment and we'll deactivate your qualification soon only because you have reached the upper limit. Thank you for completing the tasks!`
+              );
+            }
+
             filesRef
+              .orderBy("name")
+              .where("name", "not-in", workerClaimed)
               .orderBy("count")
               .where("available", "==", true)
               .limit(1)
@@ -159,8 +170,7 @@ function fetchTangram() {
                   // no available
                   // or worker has done all available ones
                   alert(
-                    `No available tangrams. Please wait for a few minutes and refresh. 
-                    If you have done all 1005 tangrams, please return the assignment.`
+                    `No available tangrams. Please wait for a few minutes and refresh.`
                   );
                 } else {
                   // claim new tangram

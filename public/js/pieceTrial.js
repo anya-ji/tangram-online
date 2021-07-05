@@ -70,6 +70,8 @@ next.addEventListener("click", async (e) => {
     uploadData["assignmentId"] = assignmentId;
     uploadData["hitId"] = hitId;
     uploadData["version"] = version;
+    uploadData["workerId"] = workerId;
+    uploadData["fileName"] = fileName;
     console.log(uploadData);
 
     var updateField = {};
