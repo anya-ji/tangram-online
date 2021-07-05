@@ -148,15 +148,15 @@ function fetchTangram() {
         .then((doc) => {
           if (doc.exists) {
             // EXISTING USER
-            var d = doc.data();
+            var d = doc.data()["assignmentId"].length;
 
-            if (d["assignmentId"].length >= 200) {
+            if (d >= 200) {
               alert(
                 `You have reached the upper limit of 200 tangrams. Please return the assignment and we'll deactivate your qualification soon only because you have reached the upper limit. Thank you for completing the tasks!`
               );
               return;
             }
-            if (d["assignmentId"].length >= 195) {
+            if (d >= 195) {
               alert(
                 `You have done over 195 annotations and you are about to reach the upper limit of 200 tangrams. We'll deactivate your qualification after you have done 200 only because that's the upper limit of tangrams we'd like you to annotate. Click "OK" to continue the task.`
               );
@@ -165,7 +165,7 @@ function fetchTangram() {
             filesRef
               .orderBy("count")
               .where("available", "==", true)
-              .limit(200)
+              .limit(d+1)
               .get()
               .then((querySnapshot) => {
                 // worker hasn't done/claimed this tangram
