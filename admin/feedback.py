@@ -18,7 +18,7 @@ db = firestore.client()
 
 docs = db.collection(u'assignments').stream()
 
-version = 'batch1'
+version = 'batch5'
 
 rs={}
 i=0

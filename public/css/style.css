@@ -31,7 +31,7 @@
 
 .next-area {
   position: fixed;
-  bottom: 7%;
+  bottom: 20%;
   right: 5%;
   display: none;
 }
@@ -43,9 +43,13 @@
   bottom: 7%;
 }
 
-.next-suggestion {
+.irb {
+  position: fixed;
+  top: 80%;
+  left: 62%;
+  right: 5%;
+  bottom: 5%;
   font-size: 15px;
-  display: inline;
 }
 
 .left-cover {
@@ -229,7 +233,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  font-size: 18px;
+  font-size: 17px;
 }
 
 .submit {
