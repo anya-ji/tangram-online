@@ -1,5 +1,5 @@
 // *** check / change before each run!
-var version = "batch6";
+var version = "batch7";
 var expiringTime = 780000; // hit duration
 var coolDownTime = 300000; // time from last claimed, to prevent all claiming the same tangram before count gets incremented
 // *** end
@@ -164,8 +164,9 @@ function fetchTangram() {
 
             filesRef
               .orderBy("count")
+              .where("count", "<", 10)
               .where("available", "==", true)
-              .limit(d+1)
+              .limit(d + 1)
               .get()
               .then((querySnapshot) => {
                 // worker hasn't done/claimed this tangram
@@ -230,6 +231,7 @@ function fetchTangram() {
             // FIRST TIME USER -- user doesn't exist
             filesRef
               .orderBy("count")
+              .where("count", "<", 10)
               .where("available", "==", true)
               .limit(1)
               .get()
