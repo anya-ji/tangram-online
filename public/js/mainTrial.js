@@ -1,5 +1,5 @@
 // *** check / change before each run!
-var version = "dense1";
+var version = "dense2";
 var expiringTime = 780000; // hit duration
 var coolDownTime = 300000; // time from last claimed, to prevent all claiming the same tangram before count gets incremented
 // *** end
@@ -148,7 +148,11 @@ function fetchTangram() {
         .then((doc) => {
           if (doc.exists) {
             // EXISTING USER
-            var d = doc.data()["assignmentId"].length;
+            var d = 0;
+            var data = doc.data();
+            if ("assignmentId" in data) {
+              d = data["assignmentId"].length;
+            }
 
             if (d >= 200) {
               alert(
@@ -163,7 +167,7 @@ function fetchTangram() {
             }
 
             filesRef
-              .where("sampled", "==", true)
+              .where("original", "==", true)
               .orderBy("count")
               .where("count", "<", 50)
               .where("available", "==", true)
@@ -231,7 +235,7 @@ function fetchTangram() {
           } else {
             // FIRST TIME USER -- user doesn't exist
             filesRef
-              .where("sampled", "==", true)
+              .where("original", "==", true)
               .orderBy("count")
               .where("count", "<", 50)
               .where("available", "==", true)
@@ -281,6 +285,7 @@ function fetchTangram() {
                             .set(
                               {
                                 claimed: [file],
+                                assignmentId: [],
                               },
                               { merge: true }
                             )
