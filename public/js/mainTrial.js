@@ -1,5 +1,5 @@
 // *** check / change before each run!
-var version = "batch7";
+var version = "dense1";
 var expiringTime = 780000; // hit duration
 var coolDownTime = 300000; // time from last claimed, to prevent all claiming the same tangram before count gets incremented
 // *** end
@@ -163,8 +163,9 @@ function fetchTangram() {
             }
 
             filesRef
+              .where("sampled", "==", true)
               .orderBy("count")
-              .where("count", "<", 10)
+              .where("count", "<", 50)
               .where("available", "==", true)
               .limit(d + 1)
               .get()
@@ -180,7 +181,7 @@ function fetchTangram() {
                   // no available
                   // or worker has done all available ones
                   alert(
-                    "No available tangrams. Please wait for a few minutes and refresh."
+                    "All available tangrams have been claimed, or you have already completed all 50 of the sampled tangrams."
                   );
                 } else {
                   // claim new tangram
@@ -230,8 +231,9 @@ function fetchTangram() {
           } else {
             // FIRST TIME USER -- user doesn't exist
             filesRef
+              .where("sampled", "==", true)
               .orderBy("count")
-              .where("count", "<", 10)
+              .where("count", "<", 50)
               .where("available", "==", true)
               .limit(1)
               .get()
