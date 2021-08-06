@@ -34,7 +34,7 @@ for collection in ['annotations','assignments','counts','files','users']:
   print('done!: ', collection)
 
 
-with open('./data/batch_final.json', 'w') as outfile: #TODO: change file name
+with open('./data/dense_final.json', 'w') as outfile: #TODO: change file name
   json.dump(data, outfile, default = myconverter)
 
 

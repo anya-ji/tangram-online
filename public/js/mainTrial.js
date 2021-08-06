@@ -1,5 +1,5 @@
 // *** check / change before each run!
-var version = "dense2";
+var version = "dense3";
 var expiringTime = 780000; // hit duration
 var coolDownTime = 300000; // time from last claimed, to prevent all claiming the same tangram before count gets incremented
 // *** end
@@ -167,7 +167,7 @@ function fetchTangram() {
             }
 
             filesRef
-              .where("original", "==", true)
+              .where("sampled", "==", true)
               .orderBy("count")
               .where("count", "<", 50)
               .where("available", "==", true)
@@ -235,7 +235,7 @@ function fetchTangram() {
           } else {
             // FIRST TIME USER -- user doesn't exist
             filesRef
-              .where("original", "==", true)
+              .where("sampled", "==", true)
               .orderBy("count")
               .where("count", "<", 50)
               .where("available", "==", true)

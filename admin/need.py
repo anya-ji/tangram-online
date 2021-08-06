@@ -22,7 +22,7 @@ db = firestore.client()
 # db.collection('counts').document('counts').update({db.field_path('page8-164'):9})
 
 i=1
-docs = db.collection('files').where('count','<',10).stream()
+docs = db.collection('files').where('count','>',10).where('count','<',50).stream()
 for doc in docs:
     print(i)
     print(f"{doc.id} => {doc.to_dict()['count']}")
