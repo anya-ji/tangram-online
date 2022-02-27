@@ -167,9 +167,9 @@ function fetchTangram() {
             }
 
             filesRef
-              .where("sampled", "==", true)
+              // .where("sampled", "==", true)
               .orderBy("count")
-              .where("count", "<", 50)
+              .where("count", "<", 10)
               .where("available", "==", true)
               .limit(d + 1)
               .get()
@@ -235,9 +235,9 @@ function fetchTangram() {
           } else {
             // FIRST TIME USER -- user doesn't exist
             filesRef
-              .where("sampled", "==", true)
+              // .where("sampled", "==", true)
               .orderBy("count")
-              .where("count", "<", 50)
+              .where("count", "<", 10)
               .where("available", "==", true)
               .limit(1)
               .get()
